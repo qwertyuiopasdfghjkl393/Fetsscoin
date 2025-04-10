@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Bonus Claim | MyWallet+</title>
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --primary-dark: #5649C0;
+            --primary-light: #A29BFE;
+            --accent: #00CEFF;
+            --success: #00B894;
+            --warning: #FDCB6E;
+            --danger: #FF7675;
+            --dark: #121826;
+            --darker: #0D1018;
+            --card-dark: #1E1E2D;
+            --text-light: #FFFFFF;
+            --text-muted: #B8B8D2;
+            --border-dark: #2A2A3A;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--text-light);
+            padding-bottom: 80px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 25px;
+            text-align: center;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Deposit Requirement */
+        .deposit-requirement {
+            background: var(--card-dark);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-dark);
+            text-align: center;
+        }
+        
+        .deposit-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .status-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--danger);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .status-icon.verified {
+            background: var(--success);
+        }
+        
+        .deposit-text {
+            font-weight: 600;
+        }
+        
+        .deposit-amount {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 10px 0;
+            color: var(--accent);
+        }
+        
+        .deposit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .deposit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Bonus Grid */
+        .bonus-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title img {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .bonus-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .bonus-card {
+            background: var(--card-dark);
+            border-radius: 12px;
+            padding: 18px;
+            border: 1px solid var(--border-dark);
+            transition: all 0.3s;
+            opacity: 0.6;
+        }
+        
+        .bonus-card.active {
+            opacity: 1;
+        }
+        
+        .bonus-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(108, 92, 231, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+        
+        .bonus-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .bonus-amount {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 10px 0;
+            color: var(--success);
+        }
+        
+        .claim-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--primary);
+            color: white;
+        }
+        
+        .claim-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .claim-btn:disabled {
+            background: #333344;
+            color: #666677;
+            cursor: not-allowed;
+        }
+        
+        .claim-btn.claimed {
+            background: var(--success);
+            cursor: default;
+        }
+        
+        /* Total Bonus */
+        .total-bonus {
+            text-align: center;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        
+        .total-amount {
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(108, 92, 231, 0.3);
+            z-index: 100;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Premium Bonus Rewards</h1>
+            <p>Deposit ₦500 to unlock all bonuses</p>
+        </div>
+        
+        <!-- Deposit Requirement -->
+        <div class="deposit-requirement">
+            <div class="deposit-status">
+                <div class="status-icon" id="statusIcon">!</div>
+                <div class="deposit-text" id="depositText">Minimum deposit required</div>
+            </div>
+            <div class="deposit-amount">₦500.00</div>
+            <a href="payment.html" class="deposit-btn" id="depositBtn">Make Deposit</a>
+        </div>
+        
+        <!-- Bonus Section -->
+        <div class="bonus-section">
+            <div class="section-title">
+                <img src="https://cdn-icons-png.flaticon.com/512/217/217853.png" alt="Bonus">
+                Available Bonuses
+            </div>
+            
+            <div class="bonus-grid">
+                <!-- Tier 1 Bonuses -->
+                <div class="bonus-card" id="whatsappBonus">
+                    <div class="bonus-icon">📱</div>
+                    <div class="bonus-name">WhatsApp Follow</div>
+                    <div class="bonus-amount">+₦1000</div>
+                    <button class="claim-btn" data-amount="100" disabled>Claim</button>
+                </div>
+                
+                <div class="bonus-card" id="telegramBonus">
+                    <div class="bonus-icon">💬</div>
+                    <div class="bonus-name">Telegram Join</div>
+                    <div class="bonus-amount">+₦1200</div>
+                    <button class="claim-btn" data-amount="100" disabled>Claim</button>
+                </div>
+                
+                <!-- Tier 2 Bonuses -->
+                <div class="bonus-card" id="facebookBonus">
+                    <div class="bonus-icon">👍</div>
+                    <div class="bonus-name">Facebook Like</div>
+                    <div class="bonus-amount">+₦1050</div>
+                    <button class="claim-btn" data-amount="150" disabled>Claim</button>
+                </div>
+                
+                <div class="bonus-card" id="instagramBonus">
+                    <div class="bonus-icon">📸</div>
+                    <div class="bonus-name">Instagram Follow</div>
+                    <div class="bonus-amount">+₦1500</div>
+                    <button class="claim-btn" data-amount="150" disabled>Claim</button>
+                </div>
+                
+                <!-- Tier 3 Bonuses -->
+                <div class="bonus-card" id="twitterBonus">
+                    <div class="bonus-icon">🐦</div>
+                    <div class="bonus-name">Twitter Follow</div>
+                    <div class="bonus-amount">+₦2000</div>
+                    <button class="claim-btn" data-amount="200" disabled>Claim</button>
+                </div>
+                
+                <div class="bonus-card" id="referralBonus">
+                    <div class="bonus-icon">👥</div>
+                    <div class="bonus-name">Referral Bonus</div>
+                    <div class="bonus-amount">+₦3000</div>
+                    <button class="claim-btn" data-amount="300" disabled>Claim</button>
+                </div>
+                
+                <!-- Special Bonuses -->
+                <div class="bonus-card" id="completeBonus">
+                    <div class="bonus-icon">🏆</div>
+                    <div class="bonus-name">Complete All</div>
+                    <div class="bonus-amount">+₦5000</div>
+                    <button class="claim-btn" data-amount="500" disabled id="completeBonusBtn">Claim</button>
+                </div>
+                
+                <div class="bonus-card" id="depositBonus">
+                    <div class="bonus-icon">💰</div>
+                    <div class="bonus-name">Deposit Bonus</div>
+                    <div class="bonus-amount">+2000%</div>
+                    <button class="claim-btn" data-amount="0" disabled id="depositBonusBtn">Claim</button>
+                </div>
+            </div>
+            
+            <div class="total-bonus">
+                Total bonus earned: <span class="total-amount" id="totalBonus">₦0</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // App State
+        let balance = 0;
+        let totalBonus = 0;
+        let hasDeposited = false;
+        let depositAmount = 0;
+        const minDeposit = 500;
+        
+        // Claimed Bonuses
+        const claimedBonuses = {
+            whatsapp: false,
+            telegram: false,
+            facebook: false,
+            instagram: false,
+            twitter: false,
+            referral: false,
+            complete: false,
+            deposit: false
+        };
+        
+        // DOM Elements
+        const balanceElement = document.getElementById('balance');
+        const totalBonusElement = document.getElementById('totalBonus');
+        const statusIcon = document.getElementById('statusIcon');
+        const depositText = document.getElementById('depositText');
+        const depositBtn = document.getElementById('depositBtn');
+        const notification = document.getElementById('notification');
+        const completeBonusBtn = document.getElementById('completeBonusBtn');
+        const depositBonusBtn = document.getElementById('depositBonusBtn');
+        
+        // Initialize
+        updateUI();
+        
+        // Add event listeners to all claim buttons
+        document.querySelectorAll('.claim-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                claimBonus(this);
+            });
+        });
+        
+        // Functions
+        function updateUI() {
+            // Update deposit status
+            if (hasDeposited) {
+                statusIcon.textContent = '✓';
+                statusIcon.classList.add('verified');
+                depositText.textContent = 'Deposit verified';
+                depositBtn.textContent = 'Deposit More';
+                
+                // Activate bonus cards
+                document.querySelectorAll('.bonus-card').forEach(card => {
+                    card.classList.add('active');
+                });
+                
+                // Enable claim buttons for non-deposit bonuses
+                document.querySelectorAll('.claim-btn:not(#depositBonusBtn)').forEach(btn => {
+                    if (!btn.classList.contains('claimed')) {
+                        btn.disabled = false;
+                    }
+                });
+                
+                // Set deposit bonus amount (20% of deposit)
+                const depositBonusAmount = Math.floor(depositAmount * 0.2);
+                document.querySelector('#depositBonus .bonus-amount').textContent = `+₦${depositBonusAmount}`;
+                depositBonusBtn.setAttribute('data-amount', depositBonusAmount);
+                depositBonusBtn.disabled = false;
+            } else {
+                statusIcon.textContent = '!';
+                statusIcon.classList.remove('verified');
+                depositText.textContent = 'Minimum deposit required';
+                depositBtn.textContent = 'Make Deposit';
+            }
+            
+            // Update total bonus display
+            totalBonusElement.textContent = `₦${totalBonus}`;
+        }
+        
+        function claimBonus(button) {
+            const bonusId = button.parentElement.id;
+            const amount = parseFloat(button.getAttribute('data-amount'));
+            
+            // Check if already claimed
+            if (claimedBonuses[bonusId]) return;
+            
+            // For complete bonus, check if all others are claimed
+            if (bonusId === 'completeBonus') {
+                const allClaimed = Object.entries(claimedBonuses)
+                    .filter(([key]) => key !== 'complete' && key !== 'deposit')
+                    .every(([, value]) => value);
+                
+                if (!allClaimed) {
+                    showNotification('Complete all other bonuses first');
+                    return;
+                }
+            }
+            
+            // Claim the bonus
+            claimedBonuses[bonusId] = true;
+            balance += amount;
+            totalBonus += amount;
+            
+            // Update button state
+            button.classList.add('claimed');
+            button.textContent = 'Claimed ✓';
+            button.disabled = true;
+            
+            // Update UI
+            updateUI();
+            showNotification(`₦${amount} bonus claimed!`);
+        }
+        
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
